@@ -13,29 +13,30 @@
             --usfs-light-grey: #f4f4f4;
         }
 
-        body { font-family: 'Helvetica Neue', Arial, sans-serif; background: transparent; margin: 0; }
+        body { 
+            font-family: 'Arial Narrow', Arial, sans-serif; 
+            background: transparent; 
+            margin: 0; 
+        }
 
-        /* Filter Bar Styling */
         #filter-bar {
             display: flex;
             justify-content: center;
             flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 20px;
-            padding: 0 10px;
+            gap: 8px;
+            margin-bottom: 15px;
         }
 
         .filter-btn {
             background: white;
             border: 1px solid var(--usfs-dark-blue);
             color: var(--usfs-dark-blue);
-            padding: 8px 16px;
+            padding: 5px 12px;
             cursor: pointer;
             text-transform: uppercase;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 700;
-            letter-spacing: 1px;
-            transition: all 0.3s ease;
+            transition: all 0.2s;
         }
 
         .filter-btn.active, .filter-btn:hover {
@@ -43,57 +44,54 @@
             color: white;
         }
 
-        /* Carousel Styling */
-        .swiper { padding: 20px 10px 50px 10px; }
+        /* COMPACT CAROUSEL */
+        .swiper { padding: 10px 40px 30px 40px; }
 
         .staff-card {
-            background: #fff;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
+            background: transparent;
+            text-align: center; /* Centering names and titles */
         }
 
         .headshot-container {
             width: 100%;
-            aspect-ratio: 3 / 4; 
+            aspect-ratio: 1 / 1; /* Square for compactness */
             overflow: hidden;
             background-color: var(--usfs-light-grey);
             border-radius: 4px;
+            margin-bottom: 10px;
         }
 
         .headshot {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.5s ease;
         }
-
-        .staff-card:hover .headshot { transform: scale(1.05); }
-
-        .info-area { padding: 15px 5px; text-align: left; }
 
         .name { 
             display: block;
-            font-size: 1.1rem; 
-            font-weight: 800; 
-            color: var(--usfs-dark-blue);
+            font-size: 1rem; 
+            font-weight: bold;
+            font-style: italic; /* Requested Bold Italic */
+            color: var(--usfs-blue); /* Name in Blue */
             text-decoration: none;
             text-transform: uppercase;
-            margin-bottom: 4px;
+            line-height: 1.1;
+            margin-bottom: 2px;
         }
 
         .name:hover { color: var(--usfs-red); }
 
         .title { 
-            font-size: 0.85rem; 
-            color: var(--usfs-blue); 
-            font-weight: 500;
-            letter-spacing: 0.5px;
+            font-size: 0.75rem; 
+            color: var(--usfs-dark-blue); /* Title in Dark Blue */
+            font-weight: normal;
             line-height: 1.2;
+            padding: 0 5px;
         }
 
-        .swiper-button-next, .swiper-button-prev { color: var(--usfs-dark-blue); top: 40%; }
-        .swiper-pagination-bullet-active { background: var(--usfs-red); }
+        /* Smaller Navigation Arrows */
+        .swiper-button-next:after, .swiper-button-prev:after { font-size: 1.2rem; font-weight: bold; }
+        .swiper-button-next, .swiper-button-prev { color: var(--usfs-dark-blue); }
     </style>
 </head>
 <body>
@@ -103,16 +101,14 @@
 </div>
 
 <div class="swiper">
-    <div class="swiper-wrapper" id="staff-container">
-        </div>
+    <div class="swiper-wrapper" id="staff-container"></div>
     <div class="swiper-button-next"></div>
     <div class="swiper-button-prev"></div>
-    <div class="swiper-pagination"></div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
-    const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTl6ClR8yzQgjnHgE4MqQIuoN3Q4ddsEvxEzpOljWKUVOoaw5xTRYQe_wcZTADn6QIU6Mph35nEi9KH/pub?output=csv'; // Replace with your link
+    const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTl6ClR8yzQgjnHgE4MqQIuoN3Q4ddsEvxEzpOljWKUVOoaw5xTRYQe_wcZTADn6QIU6Mph35nEi9KH/pub?output=csv'; 
     let allStaff = [];
     let swiper;
 
@@ -120,7 +116,6 @@
         try {
             const response = await fetch(CSV_URL);
             const text = await response.text();
-            // Basic CSV parser (handles commas, but simple)
             const rows = text.split('\n').slice(1); 
             
             allStaff = rows.map(row => {
@@ -136,16 +131,13 @@
 
             createFilters();
             renderStaff('All');
-        } catch (error) {
-            console.error("Error loading CSV:", error);
-        }
+        } catch (e) { console.error(e); }
     }
 
     function createFilters() {
         const depts = ['All', ...new Set(allStaff.map(s => s.dept))];
-        const filterBar = document.getElementById('filter-bar');
-        filterBar.innerHTML = ''; // Clear existing
-        
+        const bar = document.getElementById('filter-bar');
+        bar.innerHTML = '';
         depts.forEach(dept => {
             const btn = document.createElement('button');
             btn.className = `filter-btn ${dept === 'All' ? 'active' : ''}`;
@@ -155,14 +147,13 @@
                 e.target.classList.add('active');
                 renderStaff(dept);
             };
-            filterBar.appendChild(btn);
+            bar.appendChild(btn);
         });
     }
 
     function renderStaff(filter) {
         const container = document.getElementById('staff-container');
         container.innerHTML = ''; 
-
         const filtered = filter === 'All' ? allStaff : allStaff.filter(s => s.dept === filter);
 
         filtered.forEach(person => {
@@ -170,32 +161,32 @@
                 <div class="swiper-slide">
                     <div class="staff-card">
                         <div class="headshot-container">
-                            <img src="${person.image}" class="headshot" alt="${person.name}" onerror="this.src='https://via.placeholder.com/300x400?text=USFS'">
+                            <img src="${person.image}" class="headshot" alt="${person.name}" onerror="this.src='https://via.placeholder.com/200x200?text=USFS'">
                         </div>
-                        <div class="info-area">
-                            <a href="mailto:${person.email}" class="name">${person.name}</a>
-                            <div class="title">${person.title}</div>
-                        </div>
+                        <a href="mailto:${person.email}" class="name">${person.name}</a>
+                        <div class="title">${person.title}</div>
                     </div>
                 </div>
             `;
         });
 
-        // Re-initialize or update Swiper
         if (swiper) swiper.destroy();
         initSwiper();
     }
 
     function initSwiper() {
         swiper = new Swiper('.swiper', {
-            slidesPerView: 1,
-            spaceBetween: 20,
+            slidesPerView: 2,
+            spaceBetween: 15,
+            loop: true,
+            autoplay: {
+                delay: 3000,
+                disableOnInteraction: false,
+            },
             navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
-            pagination: { el: '.swiper-pagination', clickable: true },
             breakpoints: {
-                480: { slidesPerView: 2 },
-                768: { slidesPerView: 3 },
-                1024: { slidesPerView: 4 }
+                640: { slidesPerView: 3 },
+                1024: { slidesPerView: 5 } // Shows 5 members on desktop for a compact look
             }
         });
     }
