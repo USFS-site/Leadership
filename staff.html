@@ -12,42 +12,49 @@
             --usfs-dark-blue: #010025;
         }
 
-        body { font-family: 'Inter', sans-serif; background: transparent; margin: 0; padding: 5px; }
+        body { font-family: 'Inter', sans-serif; background: transparent; margin: 0; padding: 0; }
 
         .staff-section-wrapper {
-            max-width: 1100px;
+            max-width: 1200px;
             margin: 0 auto;
+            padding: 10px 0;
         }
 
         #filter-bar {
             display: flex;
             justify-content: center;
-            gap: 12px;
-            margin-bottom: 20px;
+            gap: 10px;
+            margin-bottom: 15px;
             flex-wrap: wrap;
         }
 
         .filter-btn {
             background: none; border: none; border-bottom: 2px solid transparent;
             color: var(--usfs-dark-blue); font-weight: 800; cursor: pointer;
-            text-transform: uppercase; font-size: 0.7rem; transition: 0.3s;
-            letter-spacing: 0.5px; padding: 2px 4px;
+            text-transform: uppercase; font-size: 0.65rem; transition: 0.3s;
+            letter-spacing: 0.5px; padding: 2px;
         }
 
         .filter-btn.active { border-bottom: 2px solid var(--usfs-red); color: var(--usfs-red); }
 
-        .swiper { padding: 0 40px 30px 40px; }
+        /* Compact Container & Spacing */
+        .swiper { padding: 0 30px 20px 30px; }
 
         .staff-card { text-align: center; }
 
-        /* Adjusted for larger size and better text fit */
         .headshot-container {
-            width: 125px; 
-            height: 160px;
-            margin: 0 auto 10px auto;
+            width: 100%; /* Flexible width */
+            max-width: 160px; /* Limits size on desktop */
+            aspect-ratio: 3 / 4;
+            margin: 0 auto 8px auto;
             overflow: hidden;
             background: #eee;
-            border-radius: 3px;
+            border-radius: 2px;
+        }
+
+        /* Mobile specific sizing */
+        @media (max-width: 640px) {
+            .headshot-container { max-width: 110px; }
         }
 
         .headshot {
@@ -59,32 +66,32 @@
 
         .name { 
             display: block; 
-            font-size: 0.85rem; 
+            font-size: 0.8rem; 
             font-weight: 800; 
             font-style: italic; 
             color: var(--usfs-blue); 
             text-decoration: none; 
             text-transform: uppercase;
-            margin-bottom: 3px; 
-            line-height: 1.2;
-            word-wrap: break-word; /* Prevents long names from breaking layout */
-            padding: 0 5px;
+            margin-bottom: 2px; 
+            line-height: 1.1;
+            padding: 0 2px;
         }
 
         .name:hover { color: var(--usfs-red); }
 
         .title { 
-            font-size: 0.7rem; 
+            font-size: 0.65rem; 
             color: var(--usfs-dark-blue);
             font-weight: 400; 
-            text-transform: capitalize; /* Capitalizes first letter of words */
-            letter-spacing: 0.2px;
-            line-height: 1.3;
-            padding: 0 5px;
+            text-transform: capitalize; 
+            line-height: 1.2;
+            padding: 0 4px;
+            display: block;
+            overflow-wrap: break-word; /* Prevents long titles from overflowing */
         }
 
-        .swiper-button-next:after, .swiper-button-prev:after { font-size: 1rem; font-weight: bold; }
-        .swiper-button-next, .swiper-button-prev { color: var(--usfs-dark-blue); top: 40%; }
+        .swiper-button-next:after, .swiper-button-prev:after { font-size: 0.8rem; font-weight: bold; }
+        .swiper-button-next, .swiper-button-prev { color: var(--usfs-dark-blue); top: 35%; width: 15px; }
     </style>
 </head>
 <body>
@@ -128,7 +135,7 @@
             
             createFilters();
             renderStaff('All');
-        } catch (e) { console.error("Error fetching TSV:", e); }
+        } catch (e) { console.error(e); }
     }
 
     function createFilters() {
@@ -171,14 +178,14 @@
 
     function initSwiper() {
         swiper = new Swiper('.swiper', {
-            slidesPerView: 2,
-            spaceBetween: 15,
+            slidesPerView: 3,
+            spaceBetween: 8, /* Cards are closer together */
             loop: true,
             autoplay: { delay: 3500, disableOnInteraction: false },
             navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
             breakpoints: {
-                640: { slidesPerView: 3 },
-                1024: { slidesPerView: 5 } 
+                640: { slidesPerView: 4, spaceBetween: 10 },
+                1024: { slidesPerView: 6, spaceBetween: 12 } /* Larger on desktop */
             }
         });
     }
