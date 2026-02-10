@@ -36,16 +36,22 @@
         /* THE UPDATED SHAPE */
         .headshot-container {
             width: 100%;
-            aspect-ratio: 1 / 1.1; /* Slightly taller than square to match screenshot */
+            aspect-ratio: 1 / 1.1; 
             margin-bottom: 12px;
             position: relative;
+            /* Using Dark Blue as a background so gaps aren't white */
             background: var(--usfs-dark-blue);
-            /* This polygon matches the slanted sides in your photo */
-            clip-path: polygon(8% 0%, 100% 0%, 92% 100%, 0% 100%);
-            border-radius: 4px; /* Optional: adds a tiny round to the corners */
+            clip-path: polygon(10% 0%, 100% 0%, 90% 100%, 0% 100%);
+            border-radius: 4px;
+            overflow: hidden;
         }
 
         .headshot {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            /* Scale(1.15) ensures the image is always larger than the container */
+            transform: translate(-50%, -50%) scale(1.15);
             width: 100%;
             height: 100%;
             object-fit: cover;
@@ -70,9 +76,7 @@
 </head>
 <body>
 
-<div id="filter-bar">
-    <button class="filter-btn active" onclick="filterStaff('All')">All</button>
-</div>
+<div id="filter-bar"><button class="filter-btn active" onclick="filterStaff('All')">All</button></div>
 
 <div class="swiper">
     <div class="swiper-wrapper" id="staff-container"></div>
