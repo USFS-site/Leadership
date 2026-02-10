@@ -15,39 +15,39 @@
         body { font-family: 'Inter', sans-serif; background: transparent; margin: 0; padding: 5px; }
 
         .staff-section-wrapper {
-            max-width: 1000px;
+            max-width: 1100px;
             margin: 0 auto;
         }
 
         #filter-bar {
             display: flex;
             justify-content: center;
-            gap: 8px;
-            margin-bottom: 12px;
+            gap: 12px;
+            margin-bottom: 20px;
             flex-wrap: wrap;
         }
 
         .filter-btn {
             background: none; border: none; border-bottom: 2px solid transparent;
             color: var(--usfs-dark-blue); font-weight: 800; cursor: pointer;
-            text-transform: uppercase; font-size: 0.6rem; transition: 0.3s;
+            text-transform: uppercase; font-size: 0.7rem; transition: 0.3s;
             letter-spacing: 0.5px; padding: 2px 4px;
         }
 
         .filter-btn.active { border-bottom: 2px solid var(--usfs-red); color: var(--usfs-red); }
 
-        .swiper { padding: 0 30px 20px 30px; }
+        .swiper { padding: 0 40px 30px 40px; }
 
         .staff-card { text-align: center; }
 
-        /* Compact Rectangle */
+        /* Adjusted for larger size and better text fit */
         .headshot-container {
-            width: 90px; 
-            height: 115px;
-            margin: 0 auto 6px auto;
+            width: 125px; 
+            height: 160px;
+            margin: 0 auto 10px auto;
             overflow: hidden;
             background: #eee;
-            border-radius: 2px;
+            border-radius: 3px;
         }
 
         .headshot {
@@ -58,21 +58,33 @@
         }
 
         .name { 
-            display: block; font-size: 0.75rem; font-weight: 800; font-style: italic; 
-            color: var(--usfs-blue); text-decoration: none; text-transform: uppercase;
-            margin-bottom: 1px; line-height: 1.1;
+            display: block; 
+            font-size: 0.85rem; 
+            font-weight: 800; 
+            font-style: italic; 
+            color: var(--usfs-blue); 
+            text-decoration: none; 
+            text-transform: uppercase;
+            margin-bottom: 3px; 
+            line-height: 1.2;
+            word-wrap: break-word; /* Prevents long names from breaking layout */
+            padding: 0 5px;
         }
 
         .name:hover { color: var(--usfs-red); }
 
         .title { 
-            font-size: 0.6rem; color: var(--usfs-dark-blue);
-            font-weight: 400; text-transform: uppercase; letter-spacing: 0.2px;
-            line-height: 1.2;
+            font-size: 0.7rem; 
+            color: var(--usfs-dark-blue);
+            font-weight: 400; 
+            text-transform: capitalize; /* Capitalizes first letter of words */
+            letter-spacing: 0.2px;
+            line-height: 1.3;
+            padding: 0 5px;
         }
 
-        .swiper-button-next:after, .swiper-button-prev:after { font-size: 0.8rem; font-weight: bold; }
-        .swiper-button-next, .swiper-button-prev { color: var(--usfs-dark-blue); top: 30%; width: 20px; }
+        .swiper-button-next:after, .swiper-button-prev:after { font-size: 1rem; font-weight: bold; }
+        .swiper-button-next, .swiper-button-prev { color: var(--usfs-dark-blue); top: 40%; }
     </style>
 </head>
 <body>
@@ -91,7 +103,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
-    /* IMPORTANT: Use the link ending in output=tsv */
     const TSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTl6ClR8yzQgjnHgE4MqQIuoN3Q4ddsEvxEzpOljWKUVOoaw5xTRYQe_wcZTADn6QIU6Mph35nEi9KH/pub?output=tsv'; 
     const PLACEHOLDER_IMG = 'https://usfigureskating.org/images/2025/9/11/USFig-V-box.png';
     
@@ -102,9 +113,8 @@
         try {
             const response = await fetch(TSV_URL);
             const text = await response.text();
-            
-            // We split by Tab (\t) instead of Comma (,) to handle job title commas
             const rows = text.split('\n').slice(1); 
+            
             allStaff = rows.map(row => {
                 const cols = row.split('\t'); 
                 return {
@@ -118,7 +128,7 @@
             
             createFilters();
             renderStaff('All');
-        } catch (e) { console.error("Data error:", e); }
+        } catch (e) { console.error("Error fetching TSV:", e); }
     }
 
     function createFilters() {
@@ -161,14 +171,14 @@
 
     function initSwiper() {
         swiper = new Swiper('.swiper', {
-            slidesPerView: 3,
-            spaceBetween: 8,
+            slidesPerView: 2,
+            spaceBetween: 15,
             loop: true,
             autoplay: { delay: 3500, disableOnInteraction: false },
             navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
             breakpoints: {
-                640: { slidesPerView: 4 },
-                1024: { slidesPerView: 7 } 
+                640: { slidesPerView: 3 },
+                1024: { slidesPerView: 5 } 
             }
         });
     }
