@@ -37,14 +37,13 @@
 
         .filter-btn.active { border-bottom: 2px solid var(--usfs-red); color: var(--usfs-red); }
 
-        /* Compact Container & Spacing */
         .swiper { padding: 0 30px 20px 30px; }
 
-        .staff-card { text-align: center; }
+        .staff-card { text-align: center; width: 100%; }
 
         .headshot-container {
-            width: 100%; /* Flexible width */
-            max-width: 160px; /* Limits size on desktop */
+            width: 100%;
+            max-width: 160px; /* Larger on desktop */
             aspect-ratio: 3 / 4;
             margin: 0 auto 8px auto;
             overflow: hidden;
@@ -52,9 +51,8 @@
             border-radius: 2px;
         }
 
-        /* Mobile specific sizing */
         @media (max-width: 640px) {
-            .headshot-container { max-width: 110px; }
+            .headshot-container { max-width: 115px; } /* Smaller on mobile */
         }
 
         .headshot {
@@ -75,6 +73,7 @@
             margin-bottom: 2px; 
             line-height: 1.1;
             padding: 0 2px;
+            word-wrap: break-word;
         }
 
         .name:hover { color: var(--usfs-red); }
@@ -87,7 +86,8 @@
             line-height: 1.2;
             padding: 0 4px;
             display: block;
-            overflow-wrap: break-word; /* Prevents long titles from overflowing */
+            word-wrap: break-word; /* Force wrap so it doesn't exceed image width */
+            max-width: 100%;
         }
 
         .swiper-button-next:after, .swiper-button-prev:after { font-size: 0.8rem; font-weight: bold; }
@@ -132,10 +132,13 @@
                     dept: cols[4]?.trim() || 'General'
                 };
             }).filter(s => s.name);
+
+            // ALPHABETIZE BY NAME
+            allStaff.sort((a, b) => a.name.localeCompare(b.name));
             
             createFilters();
             renderStaff('All');
-        } catch (e) { console.error(e); }
+        } catch (e) { console.error("Load Error:", e); }
     }
 
     function createFilters() {
@@ -179,13 +182,13 @@
     function initSwiper() {
         swiper = new Swiper('.swiper', {
             slidesPerView: 3,
-            spaceBetween: 8, /* Cards are closer together */
+            spaceBetween: 8, 
             loop: true,
             autoplay: { delay: 3500, disableOnInteraction: false },
             navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
             breakpoints: {
                 640: { slidesPerView: 4, spaceBetween: 10 },
-                1024: { slidesPerView: 6, spaceBetween: 12 } /* Larger on desktop */
+                1024: { slidesPerView: 6, spaceBetween: 12 } 
             }
         });
     }
