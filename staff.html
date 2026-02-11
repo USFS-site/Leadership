@@ -89,9 +89,44 @@
             word-wrap: break-word; /* Force wrap so it doesn't exceed image width */
             max-width: 100%;
         }
+        .swiper-button-next, .swiper-button-prev {
+        background-color: white;
+        width: 35px !important;
+        height: 35px !important;
+        border-radius: 50%;
+        border: 2px solid var(--usfs-dark-blue);
+        color: var(--usfs-dark-blue) !important;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
 
-        .swiper-button-next:after, .swiper-button-prev:after { font-size: 0.8rem; font-weight: bold; }
-        .swiper-button-next, .swiper-button-prev { color: var(--usfs-dark-blue); top: 35%; width: 15px; }
+    /* Change the chevron size inside the button */
+    .swiper-button-next:after, .swiper-button-prev:after {
+        font-size: 0.9rem !important;
+        font-weight: 900;
+    }
+
+    /* Hover State: USFS Red */
+    .swiper-button-next:hover, .swiper-button-prev:hover {
+        background-color: var(--usfs-red);
+        border-color: var(--usfs-red);
+        color: white !important;
+    }
+
+    /* Positioning them slightly further out */
+    .swiper-button-prev { left: 5px !important; }
+    .swiper-button-next { right: 5px !important; }
+
+    /* Ensure the carousel has room for the arrows on the sides */
+    .swiper { padding: 0 50px 30px 50px !important; }
+
+    @media (max-width: 640px) {
+        .swiper-button-next, .swiper-button-prev {
+            display: none; /* Hide on small mobile to save space, users can swipe */
+        }
+        .swiper { padding: 0 10px 20px 10px !important; }
+    }
+
     </style>
 </head>
 <body>
@@ -184,7 +219,7 @@
             slidesPerView: 3,
             spaceBetween: 8, 
             loop: true,
-            autoplay: { delay: 3500, disableOnInteraction: false },
+            autoplay: { delay: 4500, disableOnInteraction: false },
             navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
             breakpoints: {
                 640: { slidesPerView: 4, spaceBetween: 10 },
